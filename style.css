@@ -1,0 +1,32 @@
+html {
+  font-size: 16px;
+}
+
+html, * {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  font-size: 1rem;
+}
+
+body {
+	margin: 2rem;
+}
+
+.d-flex {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	height: 50vh;
+}
+
+.text-center {
+	text-align: center;
+}
+
+p.mute {
+	color: #a0a0a0;
+}
