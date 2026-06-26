@@ -1,12 +1,8 @@
-# Open me
-*texto llamativo*
----
-IGNORANDO LO DE ARRBA, VAMOS AL CONTENIDO DE VERDAD WE
-# ClassiCube VS Betacraft
-Ganador indiscutible: **ClassiCube**
-### Razones:
-- Liviano
-- Corre en cualquier mierda con procesador y pantalla
-- Gran comunidad
-- Hay clientes con hacks
-- Es Open Source xd
+# Temas personalizados
+Este es un tema personalizado para el generador de sitios estáticos predeterminado de GitHub Pages.
+Hablo de Jekkyll.
+
+Este tema fue tomado desde la [Política de Privacidad](https://elmichiyt.github.io/privacidad/) de mi sitio web principal.
+Adaptado a la sintaxis del generador de sitios estáticos predeterminado de GitHub Pages.
+
+Creo que dedicaré mi tiempo a generar temas de Jekyll. Obviamente gratis.
