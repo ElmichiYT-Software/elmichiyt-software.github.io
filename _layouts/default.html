@@ -1,24 +1,74 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en-US" }}">
+<html lang="{{ page.lang | default: site.lang | default: 'es-MX' }}">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% seo %}
-    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    {% seo %}
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     {% include head-custom.html %}
+
+    <!-- Un toque extra de estilo para convertirlo en un blog/documentación -->
+    <style>
+      body { background-color: #f6f8fa; color: #24292e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .main-layout { display: flex; max-width: 1200px; margin: 40px auto; padding: 0 20px; gap: 40px; }
+      
+      /* Barra lateral para artículos/navegación */
+      .sidebar { width: 280px; flex-shrink: 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(27,31,35,0.1); height: fit-content; }
+      .sidebar h2 { font-size: 16px; text-transform: uppercase; color: #586069; margin-bottom: 15px; letter-spacing: 0.5px; }
+      .sidebar ul { list-style: none; padding: 0; margin: 0; }
+      .sidebar li { margin-bottom: 10px; }
+      .sidebar a { color: #0366d6; text-decoration: none; font-size: 14px; }
+      .sidebar a:hover { text-decoration: underline; }
+
+      /* Contenido principal */
+      .content-area { flex-grow: 1; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 1px 3px rgba(27,31,35,0.1); }
+      .site-header-title { font-size: 24px; margin-bottom: 20px; border-bottom: 1px solid #e1e4e8; padding-bottom: 10px; }
+      .site-header-title a { color: #24292e; text-decoration: none; }
+      
+      /* El nuevo Footer libre de spam */
+      .custom-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e1e4e8; text-align: center; color: #6a737d; font-size: 13px; }
+
+      /* Responsivo para celulares */
+      @media (max-width: 768px) {
+        .main-layout { flex-direction: column; margin: 10px auto; }
+        .sidebar { width: 100%; }
+      }
+    </style>
   </head>
   <body>
-    <div class="container-lg px-3 my-5 markdown-body">
-      {% if site.title and site.title != page.title %}
-      {% endif %}
 
-      {{ content }}
+    <div class="main-layout">
+      <!-- BARRA LATERAL (Ideal para tus secciones o noticias) -->
+      <aside class="sidebar">
+        <h2>ElmichiYT Software</h2>
+        <ul>
+          <li><a href="{{ '/' | absolute_url }}">🏠 Inicio</a></li>
+          <li><a href="#">📰 Últimas Noticias</a></li>
+          <li><a href="#">🤣 Sección de Chistes</a></li>
+          <li><a href="#">🛠️ Proyectos</a></li>
+        </ul>
+      </aside>
 
-      {% if site.github.private != true and site.github.license %}
-      {% endif %}
+      <!-- CONTENIDO PRINCIPAL -->
+      <main class="content-area markdown-body">
+        {% if site.title and site.title != page.title %}
+        <div class="site-header-title">
+          <h1><a href="{{ '/' | absolute_url }}">{{ site.title }}</a></h1>
+        </div>
+        {% endif %}
+
+        <!-- Aquí se inyecta tu archivo .md (como tu chiste) -->
+        {{ content }}
+
+        <!-- TU NUEVO FOOTER PERSONALIZADO (Adiós "Improve this page") -->
+        <footer class="custom-footer">
+          © {{ 'now' | date: "%Y" }} ElmichiYT Software. Todos los derechos reservados.
+        </footer>
+      </main>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
     <script>anchors.add();</script>
   </body>
