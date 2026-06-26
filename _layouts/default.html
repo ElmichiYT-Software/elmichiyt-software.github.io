@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: 'es-MX' }}">
-  <head>
+<html lang="{{ page.lang | default: site.lang | default: 'es' }}">
+<head>
+    <title>{{ page.title | default: "Sin título" }} | ElmichiYT</title>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Enlazamos tus hojas de estilo tal cual las tenías -->
+    <link rel="stylesheet" href="{{ '/desktop.css' | relative_url }}" media="screen and (min-width: 768px)">
+    <link rel="stylesheet" href="{{ '/mobile.css' | relative_url }}" media="screen and (max-width: 767px)">
+</head>
+<body>
 
-    {% seo %}
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    {% include head-custom.html %}
-  </head>
-  <body>
-    <!-- Contenedor oficial del tema Primer para mantener el diseño de las fuentes y tablas -->
-    <div class="container-lg px-3 my-5 markdown-body">
-      
-      <!-- Únicamente se renderizará el texto que tú escribas en tu archivo .md -->
-      {{ content }}
-      
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
-    <script>anchors.add();</script>
-  </body>
+    <!-- El botón de regresar se queda fijo para todo tu sitio si quieres -->
+    <a class="back" href="/">Página principal</a>
+
+    <!-- AQUÍ SE INYECTARÁ TU ARCHIVO MARKDOWN (.md) -->
+    <!-- Todo lo que escribas (H1, H2, párrafos, enlaces) tomará tus estilos CSS -->
+    {{ content }}
+
+    <hr size="1">
+    <footer class="copyright">
+        <p>© Copyright 2026 ElmichiYT. Todos los derechos reservados.</p>
+    </footer>
+</body>
 </html>
