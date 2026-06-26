@@ -8,7 +8,7 @@ title: "Lista de Archivos"
   <!-- Recorre todas las páginas de tu sitio web -->
   {% for pagina in site.pages %}
     <!-- Filtra para mostrar solo las que estén dentro de una carpeta específica, por ejemplo 'articulos' -->
-    {% if pagina.path contains 'articulos/' %}
+    {% if pagina.path contains 'post/' %}
       <li>
         <a href="{{ pagina.url | relative_url }}">{{ pagina.title | default: pagina.name }}</a>
       </li>
