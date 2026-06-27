@@ -1,17 +1,127 @@
 ---
 layout: default
-title: "Lista de Archivos"
+title: "Blog de Artículos"
 ---
 
-<h1>Índice de archivos</h1>
-<ul>
-  <!-- Recorre todas las páginas de tu sitio web -->
-  {% for pagina in site.pages %}
-    <!-- Filtra para mostrar solo las que estén dentro de una carpeta específica, por ejemplo 'articulos' -->
-    {% if pagina.path contains 'post/' %}
-      <li>
-        <a href="{{ pagina.url | relative_url }}">{{ pagina.title | default: pagina.name }}</a>
-      </li>
-    {% endif %}
-  {% endfor %}
-</ul>
+<div class="blog-container">
+  <h1>📰 Artículos y Documentación</h1>
+
+  <!-- BUSCADOR -->
+  <div class="search-box" style="margin-bottom: 20px;">
+    <input type="text" id="search-input" placeholder="Buscar" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: inherit;">
+  </div>
+
+  <!-- LISTA DE POSTS -->
+  <ul id="posts-list" style="list-style: none; padding: 0;">
+    <!-- Recorremos todas las páginas del sitio usando Jekyll -->
+    {% for post in site.pages %}
+      <!-- Filtramos para que solo entren archivos dentro de carpetas de contenido (ej. posts/ o articulos/) -->
+      <!-- Evitamos la raíz, archivos de sistema, CSS y layouts -->
+      {% if post.path contains '/' and post.ext == '.md' %}
+        
+        {%- comment -%} 
+          Obtenemos el nombre de la carpeta contenedora simulando un buscador de carpetas 
+        {%- endcomment -%}
+        {% assign path_parts = post.path | split: '/' %}
+        {% assign folder_name = path_parts[0] %}
+
+        <li class="post-item" data-title="{{ post.title | downcase }}" data-folder="{{ folder_name | downcase }}" style="background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #e1e4e8;">
+          <span style="font-size: 12px; color: #586069; font-weight: bold; text-transform: uppercase;">📁 Sección: {{ folder_name }}</span>
+          <h2 style="margin: 5px 0 10px 0;">
+            <a class="link" href="{{ post.url | relative_url }}">{{ post.title | default: post.name }}</a>
+          </h2>
+          
+          <!-- Extracto del contenido (lo que todo blogger tiene) -->
+          <p style="color: #555; margin-bottom: 10px;">
+            {{ post.content | strip_html | truncatewords: 25 }}
+          </p>
+
+          <!-- Fecha de última modificación basada en el archivo -->
+          <small style="color: #6a737d;">
+            📅 Última modificación: {{ post.last_modified_at | date: "%d/%m/%Y" | default: "Reciente" }}
+          </small>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  <!-- PAGINACIÓN -->
+  <div class="pagination" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+    <button id="btn-prev" class="back" style="padding: 5px 15px;">Anterior</button>
+    <span id="page-num" style="align-self: center; font-weight: bold;">Página 1</span>
+    <button id="btn-next" class="back" style="padding: 5px 15px;">Siguiente</button>
+  </div>
+</div>
+
+<!-- LÓGICA EN JAVASCRIPT PARA EL BUSCADOR Y PAGINACIÓN ?page=X -->
+<script>
+  const POSTS_PER_PAGE = 10;
+  const postsList = document.getElementById('posts-list');
+  const postItems = Array.from(postsList.getElementsByClassName('post-item'));
+  const searchInput = document.getElementById('search-input');
+  const pageNumLabel = document.getElementById('page-num');
+  const btnPrev = document.getElementById('btn-prev');
+  const btnNext = document.getElementById('btn-next');
+
+  let filteredPosts = [...postItems];
+
+  // 1. Obtener la página actual desde la URL (?page=X)
+  function getPageFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return parseInt(params.get('page')) || 1;
+  }
+
+  // 2. Cambiar de página actualizando la URL sin recargar la web
+  function setPageToUrl(page) {
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', page);
+    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+    render();
+  }
+
+  // 3. Renderizar los posts filtrados y paginados
+  function render() {
+    let currentPage = getPageFromUrl();
+    const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE) || 1;
+
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    // Ocultar todos los posts primero
+    postItems.forEach(post => post.style.display = 'none');
+
+    // Calcular cuáles mostrar
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    const end = start + POSTS_PER_PAGE;
+    const postsToDisplay = filteredPosts.slice(start, end);
+
+    postsToDisplay.forEach(post => post.style.display = 'block');
+
+    // Actualizar controles de la UI
+    pageNumLabel.textContent = `Página ${currentPage} de ${totalPages}`;
+    btnPrev.disabled = currentPage === 1;
+    btnNext.disabled = currentPage === totalPages;
+  }
+
+  // 4. Buscador básico (Busca tanto en el título del Post como en el nombre de la Carpeta)
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+
+    filteredPosts = postItems.filter(post => {
+      const title = post.getAttribute('data-title');
+      const folder = post.getAttribute('data-folder');
+      // Si coincide con el título del archivo o con el nombre de la carpeta contenedora
+      return title.includes(query) || folder.includes(query);
+    });
+
+    setPageToUrl(1); // Reiniciar a la página 1 tras buscar
+  });
+
+  // Eventos de los botones
+  btnPrev.addEventListener('click', () => setPageToUrl(getPageFromUrl() - 1));
+  btnNext.addEventListener('click', () => setPageToUrl(getPageFromUrl() + 1));
+
+  // Inicializar al cargar la página
+  window.addEventListener('popstate', render);
+  render();
+</script>
